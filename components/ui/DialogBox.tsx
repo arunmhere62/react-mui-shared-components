@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { AppDispatch } from "../../redux/store";
+import { AppDispatch } from "../../../redux/store";
 
 type CustomizedDialogProps = {
   open?: boolean;

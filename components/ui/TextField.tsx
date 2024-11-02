@@ -1,5 +1,5 @@
 import { InputAdornment, TextField } from "@mui/material";
-import React, { } from "react";
+import React from "react";
 
 interface TextFieldProps {
     label?: string;
@@ -16,15 +16,32 @@ interface TextFieldProps {
     required?: boolean;
     width?: string;
     sx?: any;
+    size?: "small" | "medium" 
 }
 
-const TextFieldUi = ({ sx, width, required, label, value, onChange, disabled, endAdornment, startAdornment, error, helperText, name, type, fullWidth }: TextFieldProps) => {
+const TextFieldUi = ({
+    sx,
+    width,
+    required,
+    label,
+    value,
+    onChange,
+    disabled,
+    endAdornment,
+    startAdornment,
+    error,
+    helperText,
+    name,
+    type,
+    fullWidth,
+    size = "medium", // Default to medium
+}: TextFieldProps) => {
 
     return (
         <TextField
             required={required}
             variant="outlined"
-            size="small"
+            size={size}
             label={label}
             value={value}
             onChange={onChange}
@@ -43,7 +60,7 @@ const TextFieldUi = ({ sx, width, required, label, value, onChange, disabled, en
                 ) : undefined,
             }}
             sx={{
-
+                padding : "0px",
                 width: `${width}`,
                 borderRadius: "8px !important",
                 '& .MuiOutlinedInput-root': {
@@ -57,24 +74,20 @@ const TextFieldUi = ({ sx, width, required, label, value, onChange, disabled, en
                     },
                 },
                 " & .MuiFormLabel-root": {
-                    fontSize: "12px"
+                    fontSize: size === "medium" ? "15px" : "12px", // Larger font size for medium
                 },
                 " & .MuiOutlinedInput-root": {
-                    fontSize: "12px"
+                    fontSize: size === "medium" ? "15px" : "12px", // Larger font size for medium
                 },
                 "& .css-1o5h54k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
-                    fontSize: "13px",
+                    fontSize: "15px",
                 },
-                '& input:-webkit-autofill': {
-                    '-webkit-box-shadow': '0 0 0 1000px white inset !important',
-                    'box-shadow': '0 0 0 1000px white inset !important',
-                    '-webkit-text-fill-color': 'black !important',
+                "&.css-m9eh9o-MuiFormControl-root-MuiTextField-root .MuiFormLabel-root": {
+                    fontSize: "15px !important",
                 },
+               
             }}
-
-
         />
-
     );
 };
 
