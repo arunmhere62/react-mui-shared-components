@@ -1,13 +1,13 @@
-import * as React from "react";
-import { useDispatch } from "react-redux";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { AppDispatch } from "../../../redux/store";
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { AppDispatch } from '../../../redux/store';
 
 type CustomizedDialogProps = {
   open?: boolean;
@@ -23,10 +23,10 @@ type CustomizedDialogProps = {
 };
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
+  '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
-  "& .MuiDialogActions-root": {
+  '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
 }));
@@ -38,7 +38,7 @@ const DialogBoxUi = ({
   paperMinHeight,
   title,
   maxwidth,
-  minWidth = "400px", // Default minimum width
+  minWidth = '400px', // Default minimum width
   content,
   actions,
   handleClose,
@@ -73,20 +73,20 @@ const DialogBoxUi = ({
           aria-label="close"
           onClick={handleCloseDialog}
           sx={{
-            position: "absolute",
+            position: 'absolute',
             right: 6,
             top: 3,
             color: (theme) => theme.palette.grey[500],
           }}
         >
-          <CloseIcon sx={{ width: "20px" }} />
+          <CloseIcon sx={{ width: '20px' }} />
         </IconButton>
         <DialogContent
           sx={{
             ...maxwidth,
-            minWidth: "200px",
-            minHeight: "200px",
-            margin: "30px 20px 20px 20px",
+            minWidth: '200px',
+            minHeight: '200px',
+            margin: '30px 20px 20px 20px',
           }}
         >
           {content}

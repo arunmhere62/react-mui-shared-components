@@ -1,5 +1,5 @@
-import React from "react";
-import { Tabs, Tab, Box, Typography } from "@mui/material";
+import React from 'react';
+import { Tabs, Tab, Box, Typography } from '@mui/material';
 
 interface TabItem {
   label: string;
@@ -14,7 +14,7 @@ interface RoleBasedTabsProps {
 
 const RoleBasedTabs: React.FC<RoleBasedTabsProps> = ({ tabs, userRole }) => {
   if (!userRole) {
-    return <Typography>No role detected. Access denied.</Typography>; 
+    return <Typography>No role detected. Access denied.</Typography>;
   }
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
