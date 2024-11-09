@@ -1,9 +1,11 @@
-import { InputAdornment, TextField } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
+import { FormControl, InputAdornment, TextField, FormHelperText } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 interface TextFieldProps {
   label?: string;
-  value?: string | number;
+  value?: string | number | null;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void; // Added onBlur prop
   disabled?: boolean;
@@ -38,54 +40,70 @@ const TextFieldUi = ({
   fullWidth,
   size = 'medium', // Default to medium
 }: TextFieldProps) => {
+  // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <TextField
-      required={required}
-      variant="outlined"
-      size={size}
-      label={label}
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      disabled={disabled}
-      error={error}
-      helperText={helperText}
-      name={name}
-      type={type}
-      fullWidth={fullWidth || true}
-      InputProps={{
-        startAdornment: startAdornment ? <InputAdornment position="start">{startAdornment}</InputAdornment> : undefined,
-        endAdornment: endAdornment ? <InputAdornment position="end">{endAdornment}</InputAdornment> : undefined,
-      }}
-      sx={{
-        width: `${width}`,
-        borderRadius: '8px !important',
-        '& .MuiOutlinedInput-root': {
-          height: size === 'medium' ? '' : '43px',
-          ...sx,
+    <FormControl fullWidth={fullWidth || true} error={error} disabled={disabled}>
+      <TextField
+        required={required}
+        variant="outlined"
+        size={size}
+        label={label}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        disabled={disabled}
+        name={name}
+        type={type === 'password' && !showPassword ? 'password' : 'text'} // Toggle password visibility
+        fullWidth={fullWidth || true}
+        InputProps={{
+          startAdornment: startAdornment ? <InputAdornment position="start">{startAdornment}</InputAdornment> : undefined,
+          endAdornment: type === 'password' ? (
+            <InputAdornment position="end">
+              <span
+                onClick={handleClickShowPassword}
+                style={{ cursor: 'pointer' }}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </span>
+            </InputAdornment>
+          ) : (
+            endAdornment
+          ),
+        }}
+        sx={{
+          width: width ? width : '100%', // Ensure width is applied properly
           borderRadius: '8px !important',
-          overflow: 'hidden',
-          borderColor: `action.active`,
-          transition: `muiTheme.transitions.create(["border-color", "box-shadow"])`,
-          '&:hover': {
-            // backgroundColor: `action.hover`,
+          '& .MuiOutlinedInput-root': {
+            height: size === 'medium' ? '56px' : '43px', // Default height for medium size
+            ...sx,
+            borderRadius: '8px !important',
+            borderColor: 'action.active',
+            transition: (theme) => theme.transitions.create(['border-color', 'box-shadow']),
+            '&:hover': {
+              // Add hover effect styles here if needed
+            },
+            '&.Mui-error': {
+              borderColor: 'transparent', // Removing the outline color for error
+            },
           },
-        },
-        ' & .MuiFormLabel-root': {
-          lineHeight: '25px',
-          fontSize: size === 'medium' ? '15px' : '14px', // Larger font size for medium
-        },
-        ' & .MuiOutlinedInput-root': {
-          fontSize: size === 'medium' ? '15px' : '14px', // Larger font size for medium
-        },
-        '& .css-1o5h54k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
-          fontSize: '15px',
-        },
-        '&.css-m9eh9o-MuiFormControl-root-MuiTextField-root .MuiFormLabel-root': {
-          fontSize: '15px !important',
-        },
-      }}
-    />
+          '& .MuiFormLabel-root': {
+            lineHeight: '25px',
+            fontSize: size === 'medium' ? '15px' : '14px', // Larger font size for medium
+          },
+        }}
+      />
+      {helperText && (
+        <FormHelperText sx={{ color: error ? 'error.main' : 'text.secondary' }}>
+          {helperText}
+        </FormHelperText>
+      )}
+    </FormControl>
   );
 };
 

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { FormControl, FormControlLabel, FormHelperText, Switch } from '@mui/material';
 
 interface SwitchUiProps {

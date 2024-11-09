@@ -1,6 +1,6 @@
 import React from 'react';
-import { MuiTelInput, MuiTelInputProps } from 'mui-tel-input';
-import { FormHelperText, FormControl, TextFieldProps, SxProps, Theme } from '@mui/material';
+import { MuiTelInput, } from 'mui-tel-input';
+import { FormHelperText, FormControl, TextFieldProps, } from '@mui/material';
 
 interface PhoneInputProps {
   value: string;
@@ -70,6 +70,8 @@ const PhoneInputUi: React.FC<PhoneInputProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         variant={variant} // Pass variant to MuiTelInput
+        // onlyCountries={['IN', 'US', 'CA']} 
+        
       />
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>

@@ -13,11 +13,12 @@ interface ImageInputFieldUiProps {
   icon?: React.ReactNode;
   label?: string;
   error?: boolean;
-  helperText?: string;
+  helperText?: any;
   onChange: (files: File[]) => void;
   onUploadComplete?: (urls: string[]) => void;
   maxFileSize?: number; // Optional: maximum file size in bytes
   allowedTypes?: string[]; // Optional: list of allowed file types
+  multiple?: any; // Keep this as true, because the component expects it
 }
 
 const ImageInputFieldUi: React.FC<ImageInputFieldUiProps> = ({
@@ -31,44 +32,23 @@ const ImageInputFieldUi: React.FC<ImageInputFieldUiProps> = ({
   onUploadComplete,
   maxFileSize = 5 * 1024 * 1024, // Default to 5MB
   allowedTypes = ['image/png', 'image/jpeg', 'image/gif'], // Default allowed types
+  multiple = true, // This must be true because of the MuiFileInput requirement
 }) => {
   const [value, setValue] = useState<File[]>([]);
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
-  const [helperTextState, setHelperTextState] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (newFiles: File[]) => {
-    // Reset validation message
-    setHelperTextState(undefined);
-
-    // Validate files
-    const validationErrors: string[] = [];
-
-    newFiles.forEach((file) => {
-      if (file.size > maxFileSize) {
-        validationErrors.push(`${file.name} is too large. Maximum size is ${maxFileSize / 1024 / 1024} MB.`);
-      }
-      if (!allowedTypes.includes(file.type)) {
-        validationErrors.push(`${file.name} is not an allowed file type. Allowed types are: ${allowedTypes.join(', ')}.`);
-      }
-    });
-
-    if (validationErrors.length > 0) {
-      setHelperTextState(validationErrors.join(' '));
-      return; // Exit early if there are validation errors
-    }
-
+    // Restrict selection to one file
     if (newFiles.length === 0) {
       clearUploadedFiles();
-      setValue([]);
-      setUploadedUrls([]);
-      setHelperTextState('Please select at least one file.');
-      onChange([]);
+      onChange([]); // Clear out files if none selected
     } else {
-      setValue(newFiles);
-      onChange(newFiles);
+      const file = newFiles[0]; // Take the first file if multiple are selected
+      setValue([file]); // Set the selected file in the state
+      onChange([file]); // Pass the selected file to the parent component
       setLoading(true); // Start loading
-      uploadImages(newFiles);
+      uploadImages([file]); // Upload the selected file
     }
   };
 
@@ -86,7 +66,6 @@ const ImageInputFieldUi: React.FC<ImageInputFieldUiProps> = ({
         console.log(`Uploaded: ${url}`);
       } catch (error) {
         console.error('Upload failed:', error);
-        setHelperTextState('Upload failed. Please try again.');
       }
     }
     if (onUploadComplete) {
@@ -110,8 +89,7 @@ const ImageInputFieldUi: React.FC<ImageInputFieldUiProps> = ({
     // Reset state after clearing files
     setUploadedUrls([]);
     setValue([]);
-    setHelperTextState('Please select at least one file.'); // Show message after clearing
-    onChange([]);
+    onChange([]); // Clear out files
     setLoading(false); // Stop loading after clearing
   };
 
@@ -119,24 +97,17 @@ const ImageInputFieldUi: React.FC<ImageInputFieldUiProps> = ({
     clearUploadedFiles();
   };
 
-  const handleBlur = () => {
-    if (value.length === 0) {
-      setHelperTextState('Please select at least one file.');
-    }
-  };
-
   return (
-    <FormControl error={!!helperTextState} fullWidth>
+    <FormControl fullWidth error={error} disabled={disabled}>
       {label && <InputLabel>{label}</InputLabel>}
       <MuiFileInput
         value={value}
-        placeholder="Insert files"
+        placeholder="Insert file"
         size="small"
         variant="outlined"
         disabled={disabled}
         onChange={handleChange}
-        onBlur={handleBlur}
-        multiple
+        multiple={multiple} // Keep as true because it's required
         InputProps={{
           inputProps: {
             accept,
@@ -149,7 +120,7 @@ const ImageInputFieldUi: React.FC<ImageInputFieldUiProps> = ({
           ),
         }}
       />
-      {helperTextState && <FormHelperText>{helperTextState}</FormHelperText>}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 };

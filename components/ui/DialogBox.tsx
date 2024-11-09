@@ -1,30 +1,32 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { AppDispatch } from '../../../redux/store';
 
 type CustomizedDialogProps = {
   open?: boolean;
   title?: string;
   maxwidth?: any;
-  minWidth?: string;
+  minWidth?: any;
   content?: React.ReactNode;
   actions?: React.ReactNode;
-  handleClose?: () => void;
+  handleClose?: () => void;  // Callback to handle closing event
   paperWidth?: string;
-  paperMaxWidth?: string;
+  paperMaxWidth?: any;
   paperMinHeight?: string;
 };
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
+    overflow: 'auto', // Enable overflow scrolling
+    scrollbarWidth: 'none', // Hide scrollbar in Firefox
+    '&::-webkit-scrollbar': {
+      display: 'none', // Hide scrollbar in WebKit browsers (Chrome, Safari)
+    },
   },
   '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
@@ -34,38 +36,38 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const DialogBoxUi = ({
   open: defaultOpen = false,
   paperWidth,
-  paperMaxWidth,
-  paperMinHeight,
+  paperMaxWidth, // Default Material-UI maxWidth prop
+  minWidth,              // Apply minWidth dynamically
   title,
-  maxwidth,
-  minWidth = '400px', // Default minimum width
   content,
   actions,
   handleClose,
 }: CustomizedDialogProps) => {
   const [open, setOpen] = React.useState(defaultOpen);
-  const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
-    setOpen(defaultOpen);
+    setOpen(defaultOpen); // Sync local state with prop
   }, [defaultOpen]);
 
   const handleCloseDialog = () => {
-    setOpen(false);
-    handleClose && handleClose();
+    setOpen(false); // Close the dialog
+    if (handleClose) {
+      handleClose(); // Call custom onClose callback
+    }
   };
 
   return (
     <React.Fragment>
       <BootstrapDialog
-        onClose={handleCloseDialog}
+        onClose={handleCloseDialog} // Use onClose to manage state and unmount
         aria-labelledby="customized-dialog-title"
-        open={open}
+        open={open} // Control visibility using the open state
+        maxWidth={paperMaxWidth} // Use Material-UI's maxWidth property
         PaperProps={{
           sx: {
-            width: paperWidth,
-            maxWidth: paperMaxWidth,
-            minHeight: paperMinHeight,
+            width: paperWidth, // Width as specified by props
+            minWidth: "minWidth", 
+            maxWidth: "100vw", // Optional: limit max width for responsiveness
           },
         }}
       >
@@ -83,9 +85,6 @@ const DialogBoxUi = ({
         </IconButton>
         <DialogContent
           sx={{
-            ...maxwidth,
-            minWidth: '200px',
-            minHeight: '200px',
             margin: '30px 20px 20px 20px',
           }}
         >
@@ -96,5 +95,6 @@ const DialogBoxUi = ({
     </React.Fragment>
   );
 };
+
 
 export default DialogBoxUi;

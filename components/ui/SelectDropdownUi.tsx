@@ -1,7 +1,6 @@
-import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Button, Paper, FormControl, FormHelperText } from '@mui/material';
+import { Paper, FormControl, FormHelperText, CircularProgress } from '@mui/material';
 
 interface ValueProps {
   value: string | number;
@@ -18,15 +17,15 @@ interface SelectDropdownProps {
   required?: boolean;
   disabled?: boolean;
   variant?: 'outlined' | 'filled' | 'standard';
-  onBlur?: () => void;
+  onBlur?:  (event?: React.FocusEvent<HTMLElement>) => void;
   applySmallSizeStyle?: boolean;
   width?: string;
   size?: 'small' | 'medium';
+  loading?: boolean; // Add loading prop
 }
 
 export default function SelectDropdownUi({
-  size = 'medium', // Default to medium
-
+  size = 'medium',
   applySmallSizeStyle = false,
   error,
   width,
@@ -39,6 +38,7 @@ export default function SelectDropdownUi({
   variant,
   onChange,
   disabled,
+  loading = false, // Default loading to false
 }: SelectDropdownProps) {
   return (
     <FormControl fullWidth error={error} disabled={disabled}>
@@ -46,6 +46,7 @@ export default function SelectDropdownUi({
         size={size}
         disablePortal
         options={options}
+        loading={loading} // Set loading state
         value={value || null}
         onChange={(event, newValue) => {
           onChange(newValue);
@@ -67,7 +68,7 @@ export default function SelectDropdownUi({
           '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
             padding: '9px',
           },
-          '& .css-m9eh9o-MuiFormControl-root-MuiTextField-root .MuiFormLabel-root': {
+          '& .css-m9eh9o-MuiFormControl-root-MuiTextField-root-MuiFormLabel-root': {
             fontSize: '15px !important',
           },
         }}
@@ -76,15 +77,24 @@ export default function SelectDropdownUi({
         renderInput={(params) => (
           <TextField
             {...params}
-            // error={error}
             required={required}
             variant={variant}
             label={labelText}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            }}
           />
         )}
         PaperComponent={({ children }) => <Paper sx={{ '& .MuiAutocomplete-listbox': { fontSize: '13px' } }}>{children}</Paper>}
+        renderOption={(props, option) => <li {...props}>{option.label}</li>}
       />
-      {helperText && <FormHelperText id="component-helper-text">{helperText}hello world</FormHelperText>}
+      {helperText && <FormHelperText id="component-helper-text">{helperText}</FormHelperText>}
     </FormControl>
   );
 }

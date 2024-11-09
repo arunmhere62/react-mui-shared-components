@@ -1,7 +1,5 @@
 import React from 'react';
-import { Button } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useTheme } from '@mui/material/styles';
 // Define valid variant names as a union type
 type ButtonVariant = 'text' | 'outlined' | 'contained';
 
@@ -31,7 +29,6 @@ const ButtonUi: React.FC<ButtonProps> = ({
   onMouseLeave,
   label,
   variant = 'contained', // Default variant
-  color = 'primary', // Default color
   disabled = false,
   startIcon,
   endIcon,
@@ -40,13 +37,10 @@ const ButtonUi: React.FC<ButtonProps> = ({
   sx,
   type = 'submit', // Default type
   fullWidth = false,
-  component,
-  hasBackground = true, // Default to true
   loading = false,
   smallButtonCss,
   gridButton = true,
 }) => {
-  const theme = useTheme();
   return (
     <LoadingButton
       sx={{
