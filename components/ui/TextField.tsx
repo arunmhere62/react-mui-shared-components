@@ -50,6 +50,7 @@ const TextFieldUi = ({
   return (
     <FormControl fullWidth={fullWidth || true} error={error} disabled={disabled}>
       <TextField
+      
         required={required}
         variant="outlined"
         size={size}

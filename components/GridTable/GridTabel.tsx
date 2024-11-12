@@ -58,12 +58,18 @@ const GridTable: React.FC<GridTableProps> = ({ showToolbar, hideFooter, loading,
           apiRef={apiRef}
           density="compact"
           rows={loading ? skeletonRows : rows} // Ensure this works as intended
-          columns={columns}
+          columns={columns.map((column) => ({
+            ...column,
+            flex: column.flex || 1,  // Ensure flex is set if not provided
+            minWidth: column.minWidth || 100,  // Default minimum width if not provided
+          }))}
           initialState={{
             pagination: {
               paginationModel: { pageSize: 5 },
             },
+            
           }}
+          
           slots={{
             toolbar: showToolbar ? GridToolbar : GridToolbar,
           }}
