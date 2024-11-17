@@ -50,17 +50,16 @@ const TextFieldUi = ({
   return (
     <FormControl fullWidth={fullWidth || true} error={error} disabled={disabled}>
       <TextField
-      
         required={required}
         variant="outlined"
         size={size}
         label={label}
-        value={value}
+        value={value || ''}
         onChange={onChange}
         onBlur={onBlur}
         disabled={disabled}
         name={name}
-        type={type === 'password' && !showPassword ? 'password' : 'text'} // Toggle password visibility
+        type={type === 'password' ? (showPassword ? 'text' : 'password') : type} // Properly toggle visibility
         fullWidth={fullWidth || true}
         InputProps={{
           startAdornment: startAdornment ? <InputAdornment position="start">{startAdornment}</InputAdornment> : undefined,
@@ -100,7 +99,7 @@ const TextFieldUi = ({
         }}
       />
       {helperText && (
-        <FormHelperText sx={{ color: error ? 'error.main' : 'text.secondary' }}>
+        <FormHelperText sx={{ color: 'error.main'}}>
           {helperText}
         </FormHelperText>
       )}
