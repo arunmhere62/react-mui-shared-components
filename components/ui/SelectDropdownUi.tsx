@@ -22,6 +22,7 @@ interface SelectDropdownProps {
   width?: string;
   size?: 'small' | 'medium';
   loading?: boolean; // Add loading prop
+  defaultValue?: ValueProps | null; // Add default value prop
 }
 
 export default function SelectDropdownUi({
@@ -39,6 +40,7 @@ export default function SelectDropdownUi({
   onChange,
   disabled,
   loading = false, // Default loading to false
+  defaultValue,
 }: SelectDropdownProps) {
   return (
     <FormControl fullWidth error={error} disabled={disabled}>
