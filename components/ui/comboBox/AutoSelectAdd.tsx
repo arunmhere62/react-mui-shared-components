@@ -13,9 +13,11 @@ interface AutoSelectAddUiProps {
   helperText?: any; // Helper text for the form control
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void; // onBlur handler
   onChange?: (value: (string | { label: string; value: any })[]) => void; // Updated to handle both string and object
+  freeSolo? : any;
 }
 
 const AutoSelectAddUi: React.FC<AutoSelectAddUiProps> = ({
+  freeSolo = true,
   options,
   value,
   label = 'Select Tags',
@@ -51,7 +53,8 @@ const AutoSelectAddUi: React.FC<AutoSelectAddUiProps> = ({
         value={value || []} // Use the value prop passed from the parent
         onChange={handleChange}
         onBlur={onBlur} // Trigger onBlur when the field loses focus
-        freeSolo
+        filterSelectedOptions
+        freeSolo ={freeSolo}
         renderTags={(value, getTagProps) =>
           value.map((option, index) => {
             const label = typeof option === 'string' ? option : option.label;
